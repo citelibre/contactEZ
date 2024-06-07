@@ -1,7 +1,7 @@
 VERSION=1.0.9
 
 REPO=citelibre/contactEZ
-REPO-TEST=test-contactEZ
+REPO-TEST=test-contactez
 NAME_SERVICE=contactEZ
 
 build: ## Build the containers
