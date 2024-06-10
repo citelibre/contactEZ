@@ -65,22 +65,22 @@ jobs:
       run: cd citelibre-contactEZ
       
     - name: build contactEZ
-      run: docker build  citelibre-contactEZ -t citelibre/contactEZ:ihm-$VERSION
+      run: docker build  citelibre-contactEZ -t citelibre/contact_ez:ihm-$VERSION
       
     - name: build mysql
-      run: docker build  mysql -t citelibre/contactEZ:db-$VERSION
+      run: docker build  mysql -t citelibre/contact_ez:db-$VERSION
       
     - name: build matomo
-      run: docker build  matomo -t citelibre/contactEZ:matomo-$VERSION
+      run: docker build  matomo -t citelibre/contact_ez:matomo-$VERSION
       
     - name: build solr
-      run: docker build  solr -t citelibre/contactEZ:solr-$VERSION
+      run: docker build  solr -t citelibre/contact_ez:solr-$VERSION
       
     - name: build keycloak
-      run: docker build  keycloak -t citelibre/contactEZ:keycloak-$VERSION
+      run: docker build  keycloak -t citelibre/contact_ez:keycloak-$VERSION
 
     - name: build kibana
-      run: docker build  kibana -t citelibre/contactEZ:kibana-$VERSION
+      run: docker build  kibana -t citelibre/contact_ez:kibana-$VERSION
 
     - name: build elasticsearch
-      run: docker build  elasticsearch -t citelibre/contactEZ:elasticsearch-$VERSION
+      run: docker build  elasticsearch -t citelibre/contact_ez:elasticsearch-$VERSION

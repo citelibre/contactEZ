@@ -54,10 +54,10 @@ jobs:
       run: cd citelibre-contactEZ
       
     - name: build contactEZ
-      run: docker build  citelibre-contactEZ -t citelibre/contactEZ:ihm-$VERSION
+      run: docker build  citelibre-contactEZ -t citelibre/contact_ez:ihm-$VERSION
     
     - name: Save contactEZ
-      run: docker save -o citelibre-contactEZ.tar citelibre/contactEZ:ihm-$VERSION
+      run: docker save -o citelibre-contactEZ.tar citelibre/contact_ez:ihm-$VERSION
       
     - name: Run Trivy vulnerability scanner in tarball mode of rendez vous image
       uses: aquasecurity/trivy-action@master
@@ -73,29 +73,29 @@ jobs:
         sarif_file: 'trivy-results.sarif'
       
     - name: build mysql
-      run: docker build  mysql -t citelibre/contactEZ:db-$VERSION
+      run: docker build  mysql -t citelibre/contact_ez:db-$VERSION
       
     - name: build matomo
-      run: docker build  matomo -t citelibre/contactEZ:matomo-$VERSION
+      run: docker build  matomo -t citelibre/contact_ez:matomo-$VERSION
       
     - name: build solr
-      run: docker build  solr -t citelibre/contactEZ:solr-$VERSION
+      run: docker build  solr -t citelibre/contact_ez:solr-$VERSION
       
     - name: build keycloak
-      run: docker build  keycloak -t citelibre/contactEZ:keycloak-$VERSION
+      run: docker build  keycloak -t citelibre/contact_ez:keycloak-$VERSION
 
     - name: build kibana
-      run: docker build  kibana -t citelibre/contactEZ:kibana-$VERSION
+      run: docker build  kibana -t citelibre/contact_ez:kibana-$VERSION
 
     - name: build elasticsearch
-      run: docker build  elasticsearch -t citelibre/contactEZ:elasticsearch-$VERSION
+      run: docker build  elasticsearch -t citelibre/contact_ez:elasticsearch-$VERSION
       
     - name: push images on docker hub
       run: |
-        docker push citelibre/contactEZ:solr-$VERSION
-        docker push citelibre/contactEZ:db-$VERSION
-        docker push citelibre/contactEZ:matomo-$VERSION
-        docker push citelibre/contactEZ:keycloak-$VERSION
-        docker push citelibre/contactEZ:ihm-$VERSION
-        docker push citelibre/contactEZ:kibana-$VERSION
-        docker push citelibre/contactEZ:elasticsearch-$VERSION
+        docker push citelibre/contact_ez:solr-$VERSION
+        docker push citelibre/contact_ez:db-$VERSION
+        docker push citelibre/contact_ez:matomo-$VERSION
+        docker push citelibre/contact_ez:keycloak-$VERSION
+        docker push citelibre/contact_ez:ihm-$VERSION
+        docker push citelibre/contact_ez:kibana-$VERSION
+        docker push citelibre/contact_ez:elasticsearch-$VERSION
