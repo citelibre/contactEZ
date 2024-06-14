@@ -1,5 +1,7 @@
 #!/bin/bash
 
+APP_NAME=contactEZ
+
 export WAIT_HOSTS_TIMEOUT=300
 export WAIT_SLEEP_INTERVAL=30
 export WAIT_HOST_CONNECT_TIMEOUT=30
@@ -22,30 +24,40 @@ mail_port="${LUTECE_MAIL_PORT:-1025}"
 mail_user="${LUTECE_MAIL_USER:-}"
 mail_password="${LUTECE_MAIL_PWD:-}"
 
+lang_default="${LUTECE_DEFAULT_LANG:-fr}"
+lang_available="${LUTECE_AVAILABLE_LANG:-fr,en}"
+
+echo $TZ
+ln -fs /usr/share/zoneinfo/$TZ /etc/localtime
+dpkg-reconfigure -f noninteractive tzdata
+
+sed -i "s/lutece.i18n.defaultLocale=.*/lutece.i18n.defaultLocale=$lang_default/g" ${tomcat}/webapps/$APP_NAME/WEB-INF/conf/override/lutece.properties
+sed -i "s/lutece.i18n.availableLocales=.*/lutece.i18n.availableLocales=$lang_available/g" ${tomcat}/webapps/$APP_NAME/WEB-INF/conf/override/lutece.properties
+
 
 echo "Config database"
-sed -i "s/portal.user=.*/portal\.user=$db_user/" ${tomcat}/webapps/contactEZ/WEB-INF/conf/db.properties
-sed -i "s/portal.password=.*/portal\.password=$db_password/"  ${tomcat}/webapps/contactEZ/WEB-INF/conf/db.properties
-sed -i "s/\/lutece/\/$db_name/" ${tomcat}/webapps/contactEZ/WEB-INF/conf/db.properties
-sed -i "s/db:3306/$db_host:$db_port/"  ${tomcat}/webapps/contactEZ/WEB-INF/conf/db.properties
+sed -i "s/portal.user=.*/portal\.user=$db_user/" ${tomcat}/webapps/$APP_NAME/WEB-INF/conf/db.properties
+sed -i "s/portal.password=.*/portal\.password=$db_password/"  ${tomcat}/webapps/$APP_NAME/WEB-INF/conf/db.properties
+sed -i "s/\/lutece/\/$db_name/" ${tomcat}/webapps/$APP_NAME/WEB-INF/conf/db.properties
+sed -i "s/db:3306/$db_host:$db_port/"  ${tomcat}/webapps/$APP_NAME/WEB-INF/conf/db.properties
 
 
 # SMTP
 # Pb with new version => delete this file 
-rm  ${tomcat}/webapps/contactEZ/WEB-INF/conf/override/config.properties
+rm  ${tomcat}/webapps/$APP_NAME/WEB-INF/conf/override/config.properties
 
 echo "Config SMTP"
-sed -i "s/mail.server=.*/mail.server=$mail_host/g"  ${tomcat}/webapps/contactEZ/WEB-INF/conf/config.properties 
-sed -i "s/mail.server=.*/mail.server=$mail_host/g"  ${tomcat}/webapps/contactEZ/WEB-INF/templates/admin/system/config_properties.html
+sed -i "s/mail.server=.*/mail.server=$mail_host/g"  ${tomcat}/webapps/$APP_NAME/WEB-INF/conf/config.properties 
+sed -i "s/mail.server=.*/mail.server=$mail_host/g"  ${tomcat}/webapps/$APP_NAME/WEB-INF/templates/admin/system/config_properties.html
 
-sed -i "s/mail.server.port=.*/mail.server.port=$mail_port/"  ${tomcat}/webapps/contactEZ/WEB-INF/conf/config.properties
-sed -i "s/mail.server.port=.*/mail.server.port=$mail_port/"  ${tomcat}/webapps/contactEZ/WEB-INF/templates/admin/system/config_properties.html
+sed -i "s/mail.server.port=.*/mail.server.port=$mail_port/"  ${tomcat}/webapps/$APP_NAME/WEB-INF/conf/config.properties
+sed -i "s/mail.server.port=.*/mail.server.port=$mail_port/"  ${tomcat}/webapps/$APP_NAME/WEB-INF/templates/admin/system/config_properties.html
 
-sed -i "s/mail.username=.*/mail.username=$mail_user/"  ${tomcat}/webapps/contactEZ/WEB-INF/conf/config.properties 
-sed -i "s/mail.username=.*/mail.username=$mail_user/"  ${tomcat}/webapps/contactEZ/WEB-INF/templates/admin/system/config_properties.html
+sed -i "s/mail.username=.*/mail.username=$mail_user/"  ${tomcat}/webapps/$APP_NAME/WEB-INF/conf/config.properties 
+sed -i "s/mail.username=.*/mail.username=$mail_user/"  ${tomcat}/webapps/$APP_NAME/WEB-INF/templates/admin/system/config_properties.html
 
-sed -i "s/mail.password=.*/mail.password=$mail_password/"  ${tomcat}/webapps/contactEZ/WEB-INF/conf/config.properties 
-sed -i "s/mail.password=.*/mail.password=$mail_password/"  ${tomcat}/webapps/contactEZ/WEB-INF/templates/admin/system/config_properties.html
+sed -i "s/mail.password=.*/mail.password=$mail_password/"  ${tomcat}/webapps/$APP_NAME/WEB-INF/conf/config.properties 
+sed -i "s/mail.password=.*/mail.password=$mail_password/"  ${tomcat}/webapps/$APP_NAME/WEB-INF/templates/admin/system/config_properties.html
 
 echo "Launch tomcat server"
 if [[ "$LUTECE_INTERNAL_KEYCLOAK" == "true" ]]

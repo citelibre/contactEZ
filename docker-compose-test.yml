@@ -1,61 +1,66 @@
 services:
   db:
-      image: ${REPO}/db
-      container_name: contactEZ_db
-      ports:
-          - "3307:3306"
-      mem_limit: 1g
-      # if you want to persist data uncomment the following 2 lines... don't forget to create the directory mysql-data for sample
-      #volumes:
-      #    - ./mysql-data:/var/lib/mysql
+    image: ${REPO}/db
+    container_name: contactEZ_db
+    ports:
+      - "3307:3306"
+    mem_limit: 1g
+    env_file: "./external.env"
+    # if you want to persist data uncomment the following 2 lines... don't forget to create the directory mysql-data for sample
+    #volumes:
+    #    - ./mysql-data:/var/lib/mysql
 
 
   solr:
-      image: ${REPO}/solr
-      container_name: contactEZ_solr
-      command: -force
-      depends_on:
-          - db
-      mem_limit: 1g
-      ports:
-          - "8983:8983"
-      # if you want to persist data uncomment the following 2 lines... and don't forget to create the directory
-      #volumes:
-      #    - ./solr-data:/var/solr/data/cite-libre/data
+    image: ${REPO}/solr
+    container_name: contactEZ_solr
+    command: -force
+    depends_on:
+      - db
+    mem_limit: 1g
+    ports:
+      - "8983:8983"
+    env_file: "./external.env"
+    # if you want to persist data uncomment the following 2 lines... and don't forget to create the directory
+    #volumes:
+    #    - ./solr-data:/var/solr/data/cite-libre/data
 
 
   mailpit:
-      image: axllent/mailpit:v1.18.3
-      container_name: contactEZ_mailpit
-      restart: unless-stopped
-      ports:
-          - 1080:8025
-          - 1025:1025
-      mem_limit: 1g
-      environment:
-          MP_MAX_MESSAGES: 500
-          MP_SMTP_AUTH_ACCEPT_ANY: 1
-          MP_SMTP_AUTH_ALLOW_INSECURE: 1
+    image: axllent/mailpit:v1.18.3
+    container_name: contactEZ_mailpit
+    restart: unless-stopped
+    ports:
+      - 1080:8025
+      - 1025:1025
+    mem_limit: 1g
+    env_file: "./external.env"
+    environment:
+      - MP_MAX_MESSAGES=500
+      - MP_SMTP_AUTH_ACCEPT_ANY=1
+      - MP_SMTP_AUTH_ALLOW_INSECURE=1
 
             
   matomo:
-      image: ${REPO}/matomo
-      container_name: contactEZ_matomo
-      ports:
-          - "80:80"
-      mem_limit: 1g
-      depends_on:
-          - solr
+    image: ${REPO}/matomo
+    container_name: contactEZ_matomo
+    ports:
+      - "80:80"
+    mem_limit: 1g
+    depends_on:
+      - solr
+    env_file: "./external.env"
 
   keycloak:
-      image: ${REPO}/keycloak
-      container_name: contactEZ_keycloak
-      ports:
-          - "8081:8080"
-            #command: ["-Djboss.http.port=8081"]
-      mem_limit: 1g
-      depends_on:
-          - citelibre
+    image: ${REPO}/keycloak
+    container_name: contactEZ_keycloak
+    ports:
+      - "8081:8080"
+    #command: ["-Djboss.http.port=8081"]
+    mem_limit: 1g
+    depends_on:
+      - citelibre
+    env_file: "./external.env"
 
 
   citelibre:
@@ -66,6 +71,7 @@ services:
     depends_on:
       - solr
     mem_limit: 1g
+    env_file: "./external.env"
     environment:
       - LUTECE_DB_USER
       - LUTECE_DB_PWD
@@ -81,9 +87,10 @@ services:
   kibana:
     image: ${REPO}/kibana
     container_name: contactEZ_kibana
+    env_file: "./external.env"
     environment:
-    - discovery.type=single-node
-    - server.publicBaseUrl=localhost
+      - discovery.type=single-node
+      - server.publicBaseUrl=localhost
     ports:
       - 5601:5601
     mem_limit: 1g
@@ -95,21 +102,22 @@ services:
   elasticsearch:
     image: ${REPO}/elasticsearch
     container_name: contactEZ_elasticsearch
+    env_file: "./external.env"
     environment:
-    - ELASTIC_PASSWORD="*93n2US7fWog"
-    - discovery.type=single-node
-    - xpack.security.enabled=false
-    - ESJAVAOPTS=-Xmx1g
+      - ELASTIC_PASSWORD="*93n2US7fWog"
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ESJAVAOPTS=-Xmx1g
     mem_limit: 1g
     ports:
       - 9200:9200
       - 9300:9300
-    volumes:
-      - type: volume
-        source: elasticsearch-data
-        target: /usr/share/elasticsearch/data
+    # volumes:
+    #   - type: volume
+    #     source: elasticsearch-data
+    #     target: /usr/share/elasticsearch/data
 
 volumes:
   elasticsearch-data:
-  contactEZ-data:
-    #  solr-data:
+  # citelibre-data:
+  #  solr-data:
