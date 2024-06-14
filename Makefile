@@ -1,6 +1,6 @@
 VERSION=1.0.9
 
-REPO=citelibre/contactEZ
+REPO=citelibre/contact_ez
 REPO-TEST=test-contactez
 NAME_SERVICE=contactEZ
 
