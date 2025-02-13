@@ -23,7 +23,7 @@ COPY haproxy.cfg /etc/haproxy/haproxy.cfg
 
 RUN cd webapps && mkdir contactEZ &&  mv ${site}.war contactEZ/contactEZ.war  && cd contactEZ && jar xvf contactEZ.war && rm contactEZ.war
 
-COPY webapp/. webapps/contactEZ/.
+# COPY webapp/. webapps/contactEZ/.
 
 COPY entrypoint.sh /entrypoint.sh
 
