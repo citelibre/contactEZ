@@ -56,7 +56,6 @@ services:
     container_name: contactEZ_keycloak
     ports:
       - "8081:8080"
-    #command: ["-Djboss.http.port=8081"]
     mem_limit: 1g
     depends_on:
       - citelibre
@@ -117,7 +116,7 @@ services:
     #     source: elasticsearch-data
     #     target: /usr/share/elasticsearch/data
 
-volumes:
-  elasticsearch-data:
+# volumes:
+#   elasticsearch-data:
   # citelibre-data:
   #  solr-data:
